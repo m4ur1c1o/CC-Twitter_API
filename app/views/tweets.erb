@@ -1,0 +1,9 @@
+<h1>Tweets</h1>
+
+<% @timeline.each do |tweet| %>
+<p>
+	<span><%= tweet.created_at %></span><br>
+	<%= tweet.text%>
+</p>
+
+<% end %>

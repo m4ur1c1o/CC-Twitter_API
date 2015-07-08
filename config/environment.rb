@@ -39,7 +39,7 @@ require APP_ROOT.join('config', 'database')
 yaml_file = YAML.load_file('config/twitter.yml')
 
 # Configura twitter API
-client = Twitter::REST::Client.new do |config|
+$client = Twitter::REST::Client.new do |config|
   config.consumer_key        = yaml_file["CONSUMER_KEY"]
   config.consumer_secret     = yaml_file["CONSUMER_SECRET"]
   config.access_token        = yaml_file["ACCESS_TOKEN"]
