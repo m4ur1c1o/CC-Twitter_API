@@ -10,11 +10,24 @@ post '/fetch' do
 	redirect to("/#{username}")
 end
 
-get '/:handle' do
-	username = params[:handle]
+get '/:username' do
+	username = params[:username]
 	options = {count: 20}
-	@timeline = $client.user_timeline(username, options)
-	puts "Timeline: #{@timeline.first.text}"
+	@timeline = []
+	exisiting_user = TwitterUser.find_by(username: username)
+
+	if exisiting_user == nil
+		user = TwitterUser.create(username: username)
+		@tweets = $client.user_timeline(username, options)
+		@tweets.each do |tweet|
+			@timeline << Tweet.create(tweet: tweet.text, twitter_user_id: user.id)
+		end
+	else
+		@timeline = exisiting_user.tweets
+	end
+
+
+
 
 	erb :tweets
 end
