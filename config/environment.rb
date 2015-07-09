@@ -37,12 +37,23 @@ Dir[APP_ROOT.join('app', 'uploaders', '*.rb')].each { |file| require file }
 require APP_ROOT.join('config', 'database')
 
 # Configura archivo yaml
-yaml_file = YAML.load_file('config/twitter.yml')
+# yaml_file = YAML.load_file('config/twitter.yml')
+env_config = YAML.load_file(APP_ROOT.join('config', 'twitter.yaml'))
+
+env_config.each do |key, value|
+  ENV[key] = value
+end
 
 # Configura twitter API
-$client = Twitter::REST::Client.new do |config|
-  config.consumer_key        = yaml_file["CONSUMER_KEY"]
-  config.consumer_secret     = yaml_file["CONSUMER_SECRET"]
-  config.access_token        = yaml_file["ACCESS_TOKEN"]
-  config.access_token_secret = yaml_file["ACCESS_SECRET"]
+
+# $client = Twitter::REST::Client.new do |config|
+#   config.consumer_key        = yaml_file["CONSUMER_KEY"]
+#   config.consumer_secret     = yaml_file["CONSUMER_SECRET"]
+#   config.access_token        = yaml_file["TWITTER_TOKEN"]
+#   config.access_token_secret = yaml_file["TWITTER_SECRET"]
+# end
+
+CLIENT = Twitter::REST::Client.new do |config|
+  config.consumer_key = ENV['TWITTER_KEY']
+  config.consumer_secret = ENV['TWITTER_SECRET']
 end
