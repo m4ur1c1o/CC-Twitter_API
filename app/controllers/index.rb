@@ -10,6 +10,16 @@ post '/fetch' do
 	redirect to("/#{username}")
 end
 
+get '/status' do
+	user = TwitterUser.find(1)
+	# user = Tweet.find_by(twitter_user_id: 1)
+	@status = user.tweets.last.tweet
+
+	@error = session[:error]
+
+	erb :status
+end
+
 get '/:username' do
 	username = params[:username]
 	# user = TwitterUser.find_by(username: username)
@@ -41,4 +51,40 @@ get '/:username' do
 	end
 
 	erb :tweets
+end
+
+post '/tweet' do
+	tweet = params[:tweet]
+	user_id = 1
+
+	begin
+		status = $client.update!(tweet)
+	rescue
+		session[:error] = "Unable to Tweet"
+	end
+
+	if status
+		Tweet.create(tweet: status.text, twitter_user_id: user_id)		
+	end
+
+	redirect to('/status')
+end
+
+post '/tweet_ajax' do
+	tweet = params[:textarea]
+	user_id = 1
+
+	begin
+		status = $client.update!(tweet)
+	rescue
+		
+	end
+
+	if status
+		Tweet.create(tweet: status.text, twitter_user_id: user_id)	
+		'Tweet success'
+	else
+		"Unable to Tweet"
+	end
+
 end

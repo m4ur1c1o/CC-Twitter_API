@@ -1,7 +1,15 @@
 $(document).ready(function() {
-	// Este código corre después de que `document` fue cargado(loaded) 
-	// completamente. 
-	// Esto garantiza que si amarramos(bind) una función a un elemento 
-	// de HTML este exista ya en la página. 
+	$('#tweet_form').submit(function(event){
+		event.preventDefault();
+		$('textarea').prop('disabled', true);
+		$('#submit').prop('disabled', true);
+		$('#alert h4').text("se esta procesando su petición.");
+		var value = $('textarea').val();
+		$.post("/tweet_ajax", { textarea: value }, function(data){
+			 $('#alert h4').text(data);
+		});
+
+	});
 
 });
+
