@@ -1,13 +1,12 @@
-# before do
-# 	pass if ['sign_in', nil].include? request.path_info.split('/')[1]
-# 	if session[:screen_name] == nil
-# 		# puts "No existe una sesion"
-# 		session[:errors] = "No existe una sesion"
-# 		# @error = session[:error]
-# 		redirect to("/")
-# 	end
-# end
-
+before do
+	pass if ['sign_in', 'auth', nil].include? request.path_info.split('/')[1]
+	if session[:screen_name] == nil
+		# puts "No existe una sesion"
+		session[:errors] = "No existe una sesion"
+		# @error = session[:error]
+		redirect to("/")
+	end
+end
 
 get '/' do
   # La siguiente linea hace render de la vista 
