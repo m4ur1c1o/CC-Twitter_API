@@ -80,6 +80,13 @@ get '/logout' do
 	redirect to('/')
 end
 
+get '/status/:job_id' do
+  # regresa el status de un job a una petición AJAX
+  job_id = params[:job_id]
+  status = job_is_complete(job_id)
+  status.to_s
+end
+
 get '/:username' do
 	username = params[:username]
 	# user = TwitterUser.find_by(username: username)
@@ -137,14 +144,15 @@ post '/tweet_ajax' do
 	user = TwitterUser.find_by(username: screen_name)
 
 	begin
-		status = user.tweet(tweet_text)
+		job_id = user.tweet_later(tweet_text)
 	rescue
 		
 	end
 
-	if status
-		Tweet.create(tweet: status.text, twitter_user_id: user.id)	
-		'Tweet success'
+	if job_id
+		# Tweet.create(tweet: status.text, twitter_user_id: user.id)	
+		# 'Tweet success'
+		job_id
 	else
 		"Unable to Tweet"
 	end
