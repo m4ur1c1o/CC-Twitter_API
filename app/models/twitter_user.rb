@@ -30,6 +30,6 @@ class TwitterUser < ActiveRecord::Base
     tweet = Tweet.create(tweet: text, twitter_user_id: self.id)
     # Este es un método de Sidekiq con el cual se agrega a la cola una tarea para ser
     #La última linea debe de regresar un sidekiq job id
-    TweetWorker.perform_async(tweet.id)
+    TweetWorker.perform_in(1.minutes, tweet.id)
   end
 end
